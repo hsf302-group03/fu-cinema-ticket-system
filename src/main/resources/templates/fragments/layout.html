@@ -56,7 +56,7 @@
     </div>
 </nav>
 
-<!-- ===== Flash message: biến "success" / "error" (flash attribute hoặc model) ===== -->
+<!-- ===== Flash message ===== -->
 <div th:fragment="flash">
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<!-- ===== Thanh phân trang: page = Page<?>, url = URL hiện tại đã bỏ tham số page ===== -->
+<!-- ===== Thanh phân trang ===== -->
 <nav th:fragment="pagination(page, url)" th:if="${page.totalPages > 1}">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${page.first} ? 'disabled'">
