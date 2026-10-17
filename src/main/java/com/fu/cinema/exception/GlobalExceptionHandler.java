@@ -30,9 +30,10 @@ public class GlobalExceptionHandler {
         String referer = request.getHeader("Referer");
         String appRoot = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
         String current = request.getRequestURL().toString();
-        // Chỉ quay lại trang trong cùng website và KHÁC trang đang lỗi (tránh redirect vòng lặp)
+        // Chỉ quay lại trang trong cùng website và KHÁC trang đang lỗi (tránh redirect vòng lặp).
+        // Dấu "/" ở cuối appRoot là bắt buộc: chặn referer giả mạo kiểu "http://host:port.evil.com"
         boolean usable = referer != null
-                && referer.startsWith(appRoot)
+                && referer.startsWith(appRoot + "/")
                 && !referer.split("\\?")[0].equals(current);
         return "redirect:" + (usable ? referer : "/");
     }
