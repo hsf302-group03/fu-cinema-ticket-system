@@ -1,0 +1,6 @@
+#!/bin/sh
+# Chạy kiểm tra build + test trước mỗi lần push (thay cho CI).
+# Bỏ qua khi thật cần: git push --no-verify
+echo "pre-push: mvn verify..."
+if [ -f ./mvnw ]; then MVN="sh ./mvnw"; else MVN="mvn"; fi
+$MVN -q -B -ntp verify || { echo "Build/test FAILED - push bị huỷ"; exit 1; }

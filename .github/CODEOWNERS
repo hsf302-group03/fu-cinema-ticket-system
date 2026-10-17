@@ -1,0 +1,55 @@
+# CODEOWNERS — tự động yêu cầu review đúng người khi có PR chạm vào module của họ
+# Cú pháp: <pattern>  <@github-username> ...
+
+# ── Mặc định: Leader review mọi thứ ──────────────────────────────────────────
+*                                                   @hoangnhat1104
+
+# ── Cấu hình & infra ─────────────────────────────────────────────────────────
+/pom.xml                                            @hoangnhat1104
+/src/main/resources/application.properties          @hoangnhat1104
+/src/main/resources/application-local.properties.example  @hoangnhat1104
+/.github/                                           @hoangnhat1104
+/.githooks/                                         @hoangnhat1104
+
+# ── Entities & Repositories (B sở hữu) ───────────────────────────────────────
+/src/main/java/com/fu/cinema/entity/                @quanghuythcstp-dot
+/src/main/java/com/fu/cinema/repository/            @quanghuythcstp-dot
+/src/main/java/com/fu/cinema/enums/                 @quanghuythcstp-dot
+
+# ── Module: Auth (A) ──────────────────────────────────────────────────────────
+**/*Auth*                                           @hoangnhat1104
+**/*Login*                                          @hoangnhat1104
+**/*Interceptor*                                    @hoangnhat1104
+**/*Session*                                        @hoangnhat1104
+
+# ── Module: Customer (B) ─────────────────────────────────────────────────────
+**/*Customer*                                       @quanghuythcstp-dot
+**/*Profile*                                        @quanghuythcstp-dot
+
+# ── Module: Movie / Genre / Review (C) ───────────────────────────────────────
+**/*Genre*                                          @badatcode103
+**/*Movie*                                          @badatcode103
+**/*Review*                                         @badatcode103
+**/*Home*                                           @badatcode103
+
+# ── Module: Room / Showtime (C) ──────────────────────────────────────────────
+**/*Room*                                           @badatcode103
+**/*Showtime*                                       @badatcode103
+
+# ── Module: Booking / Ticket (B) ─────────────────────────────────────────────
+**/*Booking*                                        @quanghuythcstp-dot
+**/*Ticket*                                         @quanghuythcstp-dot
+
+# ── Module: Report / Dashboard (C) ───────────────────────────────────────────
+**/*Report*                                         @badatcode103
+**/*Revenue*                                        @badatcode103
+**/*Dashboard*                                      @quanghuythcstp-dot
+
+# ── Seed & Config (B) ────────────────────────────────────────────────────────
+**/*Seed*                                           @quanghuythcstp-dot
+**/*DataSeeder*                                     @quanghuythcstp-dot
+
+# ── Exception / Error handling (C) ───────────────────────────────────────────
+**/*Exception*                                      @badatcode103
+**/*Error*                                          @badatcode103
+/src/main/resources/templates/error/               @badatcode103
