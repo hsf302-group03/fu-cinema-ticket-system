@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{fragments/layout :: head('Trang chủ')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <!-- Bản TẠM: C thay bằng danh sách phim ở issue #13 (TODO 27) -->
+    <h1>FU Cinema</h1>
+    <p class="lead">Hệ thống bán vé xem phim — đang xây dựng.</p>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
