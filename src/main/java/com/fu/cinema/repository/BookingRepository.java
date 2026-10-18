@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -25,4 +28,13 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     // ===== Custom query: mỗi người thêm method của mình ở CUỐI file, mỗi method một commit =====
     // [B] #12: Q5 findDetailById, Q6 search   · [D] #11: Q9 cancelAllByShowtime
     // [D] #17: Q7 revenueByMovie, Q8 findConfirmedInPeriod   · [C] #18: Q12 countWatched
+
+    // ===== Q9: huỷ hàng loạt đơn của một suất chiếu (BR-09) =====
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+            UPDATE Booking b SET b.status = com.fu.cinema.enums.BookingStatus.CANCELLED
+            WHERE b.showtime.showtimeId = :showtimeId
+              AND b.status <> com.fu.cinema.enums.BookingStatus.CANCELLED
+            """)
+    int cancelAllByShowtime(@Param("showtimeId") Long showtimeId);
 }
