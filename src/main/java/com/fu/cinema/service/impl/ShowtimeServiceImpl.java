@@ -2,6 +2,7 @@ package com.fu.cinema.service.impl;
 
 import com.fu.cinema.dto.RoomShowtimeCount;
 import com.fu.cinema.dto.ShowtimeForm;
+import com.fu.cinema.dto.SeatMap;
 import com.fu.cinema.entity.Movie;
 import com.fu.cinema.entity.Room;
 import com.fu.cinema.entity.Showtime;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.HashSet;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,16 @@ public class ShowtimeServiceImpl implements ShowtimeService {
     private final MovieRepository movieRepository;
     private final RoomRepository roomRepository;
     private final BookingRepository bookingRepository;
+    private final TicketRepository ticketRepository;
+
+    @Override
+    public SeatMap getSeatMap(Long showtimeId) {
+        Showtime showtime = findDetail(showtimeId);
+        List<String> rows = IntStream.range(0, showtime.getRoom().getTotalRows())
+                .mapToObj(i -> String.valueOf((char) ('A' + i))).toList();
+        return new SeatMap(showtime, rows, showtime.getRoom().getSeatsPerRow(),
+                new HashSet<>(ticketRepository.findSoldSeatCodes(showtimeId)));
+    }
 
     @Override
     public Page<Showtime> search(Long movieId, Long roomId, LocalDate date, int page, int size) {
