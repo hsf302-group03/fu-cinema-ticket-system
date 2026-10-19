@@ -79,4 +79,16 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                          @Param("to") java.time.LocalDateTime to,
                          @Param("kw") String keyword,
                          Pageable pageable);
+
+    // ===== Q12: khách đã xem phim chưa (BR-16) =====
+    @Query("""
+            SELECT COUNT(b) FROM Booking b
+            WHERE b.customer.customerId = :customerId
+              AND b.showtime.movie.movieId = :movieId
+              AND b.status = com.fu.cinema.enums.BookingStatus.CONFIRMED
+              AND b.showtime.endTime < :now
+            """)
+    long countWatched(@Param("customerId") Long customerId,
+                      @Param("movieId") Long movieId,
+                      @Param("now") LocalDateTime now);
 }
