@@ -79,4 +79,28 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                          @Param("to") java.time.LocalDateTime to,
                          @Param("kw") String keyword,
                          Pageable pageable);
+
+    // Q7: ticket prices are historical sales values; grouping by ID keeps namesakes separate.
+    @Query("""
+            SELECT new com.fu.cinema.dto.MovieRevenueDTO(m.title, COUNT(t), SUM(t.price))
+            FROM Booking b JOIN b.showtime s JOIN s.movie m JOIN b.tickets t
+            WHERE b.status = com.fu.cinema.enums.BookingStatus.CONFIRMED
+              AND b.bookingDate >= :from AND b.bookingDate < :to
+            GROUP BY m.movieId, m.title
+            ORDER BY SUM(t.price) DESC, m.movieId ASC
+            """)
+    java.util.List<com.fu.cinema.dto.MovieRevenueDTO> revenueByMovie(
+            @Param("from") java.time.LocalDateTime from, @Param("to") java.time.LocalDateTime to);
+
+    // Q8: fetch everything the report renders, including tickets, with open-in-view disabled.
+    @Query("""
+            SELECT DISTINCT b FROM Booking b
+            JOIN FETCH b.customer JOIN FETCH b.showtime s JOIN FETCH s.movie
+            LEFT JOIN FETCH b.tickets
+            WHERE b.status = com.fu.cinema.enums.BookingStatus.CONFIRMED
+              AND b.bookingDate >= :from AND b.bookingDate < :to
+            ORDER BY b.bookingDate DESC, b.bookingId DESC
+            """)
+    java.util.List<Booking> findConfirmedInPeriod(
+            @Param("from") java.time.LocalDateTime from, @Param("to") java.time.LocalDateTime to);
 }
