@@ -1,14 +1,61 @@
 package com.fu.cinema.controller;
 
+import com.fu.cinema.entity.Movie;
+import com.fu.cinema.entity.Showtime;
+import com.fu.cinema.service.GenreService;
+import com.fu.cinema.service.MovieService;
+import com.fu.cinema.service.ReviewService;
+import com.fu.cinema.service.ShowtimeService;
+import com.fu.cinema.util.PageUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-// Bản TẠM của Leader để kiểm tra layout (TODO 3). C sẽ thay toàn bộ file này ở issue #13 (TODO 27).
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-    @GetMapping("/")
-    public String home() {
+    private final MovieService movieService;
+    private final GenreService genreService;
+    private final ShowtimeService showtimeService;
+    private final ReviewService reviewService;
+
+    @GetMapping({"/", "/movies"})
+    public String home(@RequestParam(required = false) String kw,
+                       @RequestParam(required = false) Long genreId,
+                       @RequestParam(defaultValue = "0") int page,
+                       Model model) {
+        Page<Movie> movies = movieService.searchForCustomer(kw, genreId, page, 12);
+        model.addAttribute("movies", movies);
+        model.addAttribute("genres", genreService.findAll());
+        model.addAttribute("kw", kw);
+        model.addAttribute("genreId", genreId);
+        model.addAttribute("pageUrl", PageUtils.currentUrlWithoutPage());
         return "index";
+    }
+
+    @GetMapping("/movies/{id}")
+    public String movieDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("movie", movieService.getForCustomer(id));
+
+        // Suất chiếu sắp tới, nhóm theo ngày (giữ thứ tự thời gian)
+        Map<LocalDate, List<Showtime>> byDate = showtimeService.findUpcomingByMovie(id).stream()
+                .collect(Collectors.groupingBy(s -> s.getStartTime().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
+        model.addAttribute("showtimesByDate", byDate);
+
+        model.addAttribute("rating", reviewService.summarize(id));
+        model.addAttribute("reviews", reviewService.findByMovie(id));
+        // [C] issue #18 (bonus): thêm canReview + reviewForm
+        return "movie-detail";
     }
 }
