@@ -11,7 +11,12 @@ public interface MovieService {
 
     Page<Movie> searchForAdmin(String keyword, Long genreId, MovieStatus status, int page, int size, String sort);
 
+    Page<Movie> searchForCustomer(String keyword, Long genreId, int page, int size);
+
     Movie getById(Long movieId);
+
+    /** Dành cho khách: phim STOPPED coi như không tồn tại (BR-06) */
+    Movie getForCustomer(Long movieId);
 
     MovieForm getForm(Long movieId);
 

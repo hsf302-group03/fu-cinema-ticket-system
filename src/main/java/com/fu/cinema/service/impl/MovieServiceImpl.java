@@ -42,9 +42,26 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Page<Movie> searchForCustomer(String keyword, Long genreId, int page, int size) {
+        // Khách hàng không thấy phim STOPPED (BR-06)
+        return movieRepository.search(ValidationUtils.blankToNull(keyword), genreId,
+                EnumSet.of(MovieStatus.SHOWING, MovieStatus.COMING_SOON),
+                PageRequest.of(Math.max(page, 0), size, Sort.by("releaseDate").descending()));
+    }
+
+    @Override
     public Movie getById(Long movieId) {
         return movieRepository.findWithGenreById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Phim", movieId));
+    }
+
+    @Override
+    public Movie getForCustomer(Long movieId) {
+        Movie movie = getById(movieId);
+        if (movie.getStatus() == MovieStatus.STOPPED) {                             // BR-06
+            throw new ResourceNotFoundException("Phim", movieId);
+        }
+        return movie;
     }
 
     @Override
