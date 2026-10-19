@@ -36,7 +36,18 @@
     </div>
 
     <h4 class="mt-4">Đánh giá của khán giả</h4>
-    <!-- [C] issue #18 (bonus): form đánh giá đặt ở đây -->
+    <form th:if="${canReview}" th:action="@{/customer/movies/{id}/review(id=${movie.movieId})}"
+          th:object="${reviewForm}" method="post" class="card card-body mb-3">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <select class="form-select" th:field="*{rating}">
+                    <option th:each="i : ${#numbers.sequence(5, 1, -1)}" th:value="${i}" th:text="|${i} ⭐|"></option>
+                </select>
+            </div>
+            <div class="col-md-8"><input class="form-control" th:field="*{comment}" placeholder="Nhận xét của bạn..."></div>
+            <div class="col-md-2 d-grid"><button class="btn btn-primary">Gửi đánh giá</button></div>
+        </div>
+    </form>
     <div th:each="r : ${reviews}" class="border-bottom py-2">
         <strong th:text="${r.customer.fullName}"></strong>
         <span th:text="|${r.rating} ⭐|"></span>
