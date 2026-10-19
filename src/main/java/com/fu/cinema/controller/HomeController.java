@@ -1,5 +1,6 @@
 package com.fu.cinema.controller;
 
+import com.fu.cinema.dto.SessionUser;
 import com.fu.cinema.entity.Movie;
 import com.fu.cinema.entity.Showtime;
 import com.fu.cinema.service.GenreService;
@@ -7,6 +8,8 @@ import com.fu.cinema.service.MovieService;
 import com.fu.cinema.service.ReviewService;
 import com.fu.cinema.service.ShowtimeService;
 import com.fu.cinema.util.PageUtils;
+import com.fu.cinema.util.SessionUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -45,7 +48,9 @@ public class HomeController {
     }
 
     @GetMapping("/movies/{id}")
-    public String movieDetail(@PathVariable Long id, Model model) {
+    public String movieDetail(@PathVariable Long id,
+                              HttpServletRequest request,
+                              Model model) {
         model.addAttribute("movie", movieService.getForCustomer(id));
 
         // Suất chiếu sắp tới, nhóm theo ngày (giữ thứ tự thời gian)
@@ -55,7 +60,13 @@ public class HomeController {
 
         model.addAttribute("rating", reviewService.summarize(id));
         model.addAttribute("reviews", reviewService.findByMovie(id));
-        // [C] issue #18 (bonus): thêm canReview + reviewForm
+        SessionUser user = SessionUtils.getCurrentUser(request.getSession(false));
+        Long customerId = user == null ? null : user.getCustomerId();
+        boolean canReview = reviewService.canReview(customerId, id);
+        model.addAttribute("canReview", canReview);
+        if (canReview) {
+            model.addAttribute("reviewForm", reviewService.getForm(customerId, id));
+        }
         return "movie-detail";
     }
 }
