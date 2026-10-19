@@ -24,5 +24,12 @@ public interface BookingService {
     Booking create(Long customerId, BookingRequest request);
 
     Booking getConfirmation(Long customerId, Long bookingId);
+
+    // ===== Customer history =====
+    Page<Booking> findByCustomer(Long customerId, BookingStatus status, int page, int size);
+
+    Booking getDetailForCustomer(Long bookingId, Long customerId);
+
+    void cancelByCustomer(Long bookingId, Long customerId);
     // [B] issue #15 thêm findByCustomer(...), getDetailForCustomer(...), cancelByCustomer(...)
 }

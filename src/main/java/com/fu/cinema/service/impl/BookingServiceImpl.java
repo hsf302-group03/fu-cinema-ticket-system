@@ -18,6 +18,7 @@ import com.fu.cinema.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ public class BookingServiceImpl implements BookingService {
     private final CustomerRepository customerRepository;
     private final ShowtimeRepository showtimeRepository;
     private final TicketRepository ticketRepository;
+    private static final int CANCEL_BEFORE_HOURS = 2;
     private static final Pattern SEAT_PATTERN = Pattern.compile("^[A-Z][1-9]\\d?$");
 
     @Override
@@ -104,6 +106,41 @@ public class BookingServiceImpl implements BookingService {
             throw new ResourceNotFoundException("Đơn đặt vé", bookingId);
         }
         return booking;
+    }
+
+    // ================= Customer history =================
+
+    @Override
+    public Page<Booking> findByCustomer(Long customerId, BookingStatus status, int page, int size) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), size, Sort.by("bookingDate").descending());
+        return status == null
+                ? bookingRepository.findByCustomer_CustomerId(customerId, pageable)
+                : bookingRepository.findByCustomer_CustomerIdAndStatus(customerId, status, pageable);
+    }
+
+    @Override
+    public Booking getDetailForCustomer(Long bookingId, Long customerId) {
+        Booking booking = getDetail(bookingId);
+        if (!booking.getCustomer().getCustomerId().equals(customerId)) {
+            // Không tiết lộ đơn của người khác tồn tại hay không → trả 404
+            throw new ResourceNotFoundException("Đơn đặt vé", bookingId);
+        }
+        return booking;
+    }
+
+    @Override
+    @Transactional
+    public void cancelByCustomer(Long bookingId, Long customerId) {
+        Booking booking = getDetailForCustomer(bookingId, customerId);
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+            throw new BusinessException("Đơn đã được huỷ trước đó");
+        }
+        if (LocalDateTime.now().isAfter(
+                booking.getShowtime().getStartTime().minusHours(CANCEL_BEFORE_HOURS))) {
+            throw new BusinessException(
+                    "Chỉ được huỷ đơn trước giờ chiếu ít nhất " + CANCEL_BEFORE_HOURS + " giờ"); // BR-14
+        }
+        booking.setStatus(BookingStatus.CANCELLED);
     }
 
     // ================= Admin =================

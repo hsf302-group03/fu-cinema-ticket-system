@@ -37,6 +37,7 @@
 
                 <th:block th:if="${currentUser != null and currentUser.customer}">
                     <!-- [B] menu Vé của tôi (issue #15) -->
+                    <li class="nav-item"><a class="nav-link" th:href="@{/customer/bookings}">Vé của tôi</a></li>
                     <!-- [B] menu Hồ sơ (issue #16) -->
                 </th:block>
             </ul>
