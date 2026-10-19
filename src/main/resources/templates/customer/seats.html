@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{fragments/layout :: head('Chọn ghế và đặt vé')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4" th:with="s=${seatMap.showtime}">
+    <a th:href="@{/movies/{id}(id=${s.movie.movieId})}">← Lịch chiếu phim</a>
+    <h1 class="h2 mt-3">Chọn ghế và đặt vé</h1>
+    <h2 class="h4" th:text="${s.movie.title}"></h2>
+    <p class="text-muted">
+        <span th:text="|${s.room.roomName} · ${#temporals.format(s.startTime, 'HH:mm dd/MM/yyyy')} · ${s.movie.ageRating}|"></span>
+        · <span th:text="|${#numbers.formatInteger(s.ticketPrice, 1, 'POINT')} đ / vé|"></span>
+    </p>
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <p th:unless="${seatMap.bookable}" class="alert alert-warning" role="alert">Suất chiếu không còn mở bán. Vui lòng chọn suất chiếu khác.</p>
+    <form th:action="@{/customer/bookings}" method="post" id="booking-form"
+          th:attr="data-price=${s.ticketPrice}">
+        <input type="hidden" name="showtimeId" th:value="${s.showtimeId}">
+        <fieldset th:disabled="${!seatMap.bookable}">
+            <legend class="h6">Chọn từ 1 đến 8 ghế</legend>
+            <div class="seat-map-scroll border rounded p-3 mb-3" role="region" aria-label="Sơ đồ ghế" tabindex="0">
+                <div class="seat-grid">
+                    <div class="screen py-2">MÀN HÌNH</div>
+                    <div class="seat-row" th:each="row : ${seatMap.rowLabels}">
+                        <span class="row-label" th:text="${row}" aria-hidden="true"></span>
+                        <span th:each="n : ${#numbers.sequence(1, seatMap.seatsPerRow)}"
+                              th:with="code=${row + n}" class="seat" th:classappend="${seatMap.isSold(code)} ? 'sold'">
+                            <input type="checkbox" name="seatCodes" th:id="${'seat-' + code}" th:value="${code}"
+                                   th:disabled="${seatMap.isSold(code)}"
+                                   th:attr="aria-label=|Ghế ${code}${seatMap.isSold(code) ? ' đã bán' : ''}|">
+                            <label th:for="${'seat-' + code}" th:text="${code}"></label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p class="d-flex flex-wrap gap-3 small">
+                <span><span class="seat-key available" aria-hidden="true"></span> Trống</span>
+                <span><span class="seat-key selected" aria-hidden="true"></span> Đang chọn</span>
+                <span><span class="seat-key sold" aria-hidden="true"></span> Đã bán (không chọn được)</span>
+            </p>
+            <div class="border-top pt-3" aria-live="polite" aria-atomic="true">
+                <p>Ghế đã chọn: <strong id="selected-seats">Chưa chọn ghế</strong></p>
+                <p class="h5">Tạm tính: <strong id="booking-total">0 đ</strong></p>
+                <p id="seat-help" class="text-muted">Mỗi đơn tối đa 8 ghế. Giá cuối cùng được xác nhận khi đặt vé.</p>
+            </div>
+            <button type="submit" class="btn btn-success" id="confirm-booking" aria-describedby="seat-help">Xác nhận đặt vé</button>
+            <noscript><p class="mt-2">Chọn ghế rồi xác nhận; tổng tiền sẽ hiển thị trong đơn đặt vé.</p></noscript>
+        </fieldset>
+    </form>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/seat-booking.js}" defer></script>
+</body>
+</html>
