@@ -1,6 +1,8 @@
 package com.fu.cinema.service.impl;
 
+import com.fu.cinema.dto.ChangePasswordForm;
 import com.fu.cinema.dto.CustomerForm;
+import com.fu.cinema.dto.ProfileForm;
 import com.fu.cinema.entity.Account;
 import com.fu.cinema.entity.Customer;
 import com.fu.cinema.enums.AccountStatus;
@@ -80,24 +82,23 @@ public class CustomerServiceImpl implements CustomerService {
         checkAge(form);
 
         copy(form, customer, email);
-        account.setUsername(email);                          // username = email
+        account.setUsername(email);
         account.setStatus(form.getStatus());
         if (form.getPassword() != null && !form.getPassword().isBlank()) {
             account.setPassword(passwordEncoder.encode(form.getPassword()));
         }
-        // dirty checking tự sinh UPDATE khi commit
     }
 
     @Override
     @Transactional
     public boolean delete(Long customerId) {
         Customer customer = findWithAccount(customerId);
-        if (bookingRepository.existsByCustomer_CustomerId(customerId)) {          // BR-04
+        if (bookingRepository.existsByCustomer_CustomerId(customerId)) {    // BR-04
             customer.getAccount().setStatus(AccountStatus.LOCKED);
             return false;
         }
         Account account = customer.getAccount();
-        customerRepository.delete(customer);                 // xoá bảng con trước
+        customerRepository.delete(customer);
         accountRepository.delete(account);
         return true;
     }
@@ -115,6 +116,52 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.count();
     }
 
+    // ================= Customer =================
+
+    @Override
+    public ProfileForm getProfile(Long customerId) {
+        Customer c = findWithAccount(customerId);
+        ProfileForm form = new ProfileForm();
+        form.setUsername(c.getAccount().getUsername());
+        form.setFullName(c.getFullName());
+        form.setEmail(c.getEmail());
+        form.setMobile(c.getMobile());
+        form.setBirthday(c.getBirthday());
+        form.setIdentityCard(c.getIdentityCard());
+        return form;
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(Long customerId, ProfileForm form) {
+        Customer customer = findWithAccount(customerId);
+        String email = form.getEmail().trim().toLowerCase();
+        checkDuplicates(email, form.getMobile(), form.getIdentityCard(),
+                customerId, customer.getAccount().getAccountId());
+        if (ValidationUtils.age(form.getBirthday()) < 13) {
+            throw new BusinessException("Khách hàng phải từ đủ 13 tuổi");
+        }
+        customer.setFullName(form.getFullName().trim());
+        customer.setEmail(email);                            // username đăng nhập KHÔNG đổi
+        customer.setMobile(form.getMobile());
+        customer.setBirthday(form.getBirthday());
+        customer.setIdentityCard(form.getIdentityCard());
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(Long accountId, ChangePasswordForm form) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản", accountId));
+        if (!passwordEncoder.matches(form.getCurrentPassword(), account.getPassword())) {
+            throw new BusinessException("Mật khẩu hiện tại không đúng");
+        }
+        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
+            throw new BusinessException("Mật khẩu nhập lại không khớp");
+        }
+        account.setPassword(passwordEncoder.encode(form.getNewPassword()));
+    }
+
     // ================= helpers =================
 
     private Customer findWithAccount(Long customerId) {
@@ -129,23 +176,20 @@ public class CustomerServiceImpl implements CustomerService {
                 ? customerRepository.existsByEmail(email) || accountRepository.existsByUsername(email)
                 : customerRepository.existsByEmailAndCustomerIdNot(email, customerId)
                   || accountRepository.existsByUsernameAndAccountIdNot(email, accountId);
-        if (emailUsed) {
-            throw new BusinessException("Email đã được sử dụng");
-        }
+        if (emailUsed) throw new BusinessException("Email đã được sử dụng");
+
         if (isNew ? customerRepository.existsByMobile(mobile)
-                  : customerRepository.existsByMobileAndCustomerIdNot(mobile, customerId)) {
+                  : customerRepository.existsByMobileAndCustomerIdNot(mobile, customerId))
             throw new BusinessException("Số điện thoại đã được sử dụng");
-        }
+
         if (isNew ? customerRepository.existsByIdentityCard(identityCard)
-                  : customerRepository.existsByIdentityCardAndCustomerIdNot(identityCard, customerId)) {
+                  : customerRepository.existsByIdentityCardAndCustomerIdNot(identityCard, customerId))
             throw new BusinessException("Số CCCD đã được sử dụng");
-        }
     }
 
     private void checkAge(CustomerForm form) {
-        if (ValidationUtils.age(form.getBirthday()) < 13) {
+        if (ValidationUtils.age(form.getBirthday()) < 13)
             throw new BusinessException("Khách hàng phải từ đủ 13 tuổi");
-        }
     }
 
     private void copy(CustomerForm form, Customer customer, String email) {
