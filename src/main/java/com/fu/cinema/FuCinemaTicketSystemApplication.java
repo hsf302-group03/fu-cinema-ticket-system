@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class FuCinemaTicketSystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FuCinemaTicketSystemApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(FuCinemaTicketSystemApplication.class, args);
+    }
 }

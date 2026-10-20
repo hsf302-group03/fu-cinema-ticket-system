@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{fragments/layout :: head('Chi tiết vé')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4" style="max-width: 720px">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h3 th:text="|Đơn #${booking.bookingId}|"></h3>
+    <table class="table">
+        <tr>
+            <th style="width: 140px">Trạng thái</th>
+            <td>
+                <span class="badge"
+                      th:text="${booking.status}"
+                      th:classappend="${booking.status.name() == 'CONFIRMED'} ? 'bg-success'
+                                    : (${booking.status.name() == 'PENDING'} ? 'bg-warning text-dark'
+                                    : 'bg-secondary')"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>Phim</th>
+            <td th:text="${booking.showtime.movie.title}"></td>
+        </tr>
+        <tr>
+            <th>Suất chiếu</th>
+            <td th:text="|${#temporals.format(booking.showtime.startTime, 'dd/MM/yyyy HH:mm')} · ${booking.showtime.room.roomName}|"></td>
+        </tr>
+        <tr>
+            <th>Ghế</th>
+            <td>
+                <span class="badge bg-dark me-1"
+                      th:each="t : ${booking.tickets}"
+                      th:text="${t.seatCode}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>Tổng tiền</th>
+            <td class="fw-bold"
+                th:text="${#numbers.formatDecimal(booking.totalAmount, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+        </tr>
+        <tr>
+            <th>Ngày đặt</th>
+            <td th:text="${#temporals.format(booking.bookingDate, 'dd/MM/yyyy HH:mm')}"></td>
+        </tr>
+    </table>
+
+    <div class="d-flex gap-2">
+        <!-- Huỷ: chỉ hiện khi chưa CANCELLED -->
+        <form th:if="${booking.status.name() != 'CANCELLED'}"
+              method="post"
+              th:action="@{/customer/bookings/{id}/cancel(id=${booking.bookingId})}"
+              onsubmit="return confirm('Bạn chắc chắn muốn huỷ đơn này?');">
+            <button class="btn btn-outline-danger">Huỷ đơn</button>
+        </form>
+        <a class="btn btn-secondary" th:href="@{/customer/bookings}">Quay lại</a>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

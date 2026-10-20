@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{fragments/layout :: head('Đặt vé thành công')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <h1 class="h2">Đặt vé thành công</h1>
+    <p class="alert alert-success" role="status">Đơn của bạn đã được lưu. Bạn có thể xem trạng thái bên dưới.</p>
+    <dl class="row" th:with="s=${booking.showtime}">
+        <dt class="col-sm-3">Mã đơn</dt><dd class="col-sm-9" th:text="|#${booking.bookingId}|"></dd>
+        <dt class="col-sm-3">Phim</dt><dd class="col-sm-9" th:text="${s.movie.title}"></dd>
+        <dt class="col-sm-3">Suất chiếu</dt><dd class="col-sm-9" th:text="|${s.room.roomName} · ${#temporals.format(s.startTime, 'HH:mm dd/MM/yyyy')}|"></dd>
+        <dt class="col-sm-3">Ghế</dt><dd class="col-sm-9"><span class="badge bg-dark me-1" th:each="t : ${booking.tickets}" th:text="${t.seatCode}"></span></dd>
+        <dt class="col-sm-3">Tổng tiền</dt><dd class="col-sm-9 fw-bold" th:text="|${#numbers.formatInteger(booking.totalAmount, 1, 'POINT')} đ|"></dd>
+        <dt class="col-sm-3">Trạng thái</dt><dd class="col-sm-9" th:text="${booking.status}"></dd>
+    </dl>
+    <a class="btn btn-primary" th:href="@{/}">Tiếp tục xem phim</a>
+    <a class="btn btn-outline-secondary" th:href="@{/customer/showtimes/{id}/seats(id=${booking.showtime.showtimeId})}">Xem lại sơ đồ ghế</a>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

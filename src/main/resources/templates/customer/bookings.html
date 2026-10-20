@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{fragments/layout :: head('Vé của tôi')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+    <h3 class="mb-3">Lịch sử đặt vé</h3>
+    <form class="row g-2 mb-3" method="get" th:action="@{/customer/bookings}">
+        <div class="col-md-3">
+            <select class="form-select" name="status" onchange="this.form.submit()">
+                <option value="">Tất cả trạng thái</option>
+                <option th:each="st : ${statuses}" th:value="${st}" th:text="${st}"
+                        th:selected="${st == status}"></option>
+            </select>
+        </div>
+    </form>
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th><th>Ngày đặt</th><th>Phim</th><th>Suất chiếu</th>
+                <th>Tổng tiền</th><th>Trạng thái</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${bookings.empty}">
+                <td colspan="7" class="text-center text-muted">Bạn chưa có đơn đặt vé nào</td>
+            </tr>
+            <tr th:each="b : ${bookings.content}">
+                <td th:text="${b.bookingId}"></td>
+                <td th:text="${#temporals.format(b.bookingDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${b.showtime.movie.title}"></td>
+                <td th:text="|${#temporals.format(b.showtime.startTime, 'dd/MM/yyyy HH:mm')} · ${b.showtime.room.roomName}|"></td>
+                <td th:text="${#numbers.formatDecimal(b.totalAmount, 0, 'COMMA', 0, 'POINT')} + 'đ'"></td>
+                <td>
+                    <span class="badge"
+                          th:text="${b.status}"
+                          th:classappend="${b.status.name() == 'CONFIRMED'} ? 'bg-success'
+                                        : (${b.status.name() == 'PENDING'} ? 'bg-warning text-dark'
+                                        : 'bg-secondary')"></span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary"
+                       th:href="@{/customer/bookings/{id}(id=${b.bookingId})}">Chi tiết</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div th:replace="~{fragments/layout :: pagination(${bookings}, ${pageUrl})}"></div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
