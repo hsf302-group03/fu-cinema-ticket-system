@@ -5,8 +5,49 @@
 <nav th:replace="~{fragments/layout :: navbar}"></nav>
 <main class="container py-4">
     <div th:replace="~{fragments/layout :: flash}"></div>
-    <h3>Dashboard</h3>
-    <p class="text-muted">Xin chào quản trị viên. Số liệu thống kê sẽ được bổ sung ở issue #20.</p>
+    <h3 class="mb-4">Dashboard</h3>
+
+    <!-- 3 thẻ số liệu -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card card-body text-center">
+                <div class="text-muted small mb-1">Phim đang chiếu</div>
+                <div class="fs-2 fw-bold text-primary" th:text="${stats.showingMovies}">0</div>
+                <a class="stretched-link" th:href="@{/admin/movies(status='SHOWING')}"></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-body text-center">
+                <div class="text-muted small mb-1">Khách hàng</div>
+                <div class="fs-2 fw-bold text-success" th:text="${stats.customers}">0</div>
+                <a class="stretched-link" th:href="@{/admin/customers}"></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-body text-center">
+                <div class="text-muted small mb-1">Đơn chờ xác nhận</div>
+                <div class="fs-2 fw-bold text-warning" th:text="${stats.pendingBookings}">0</div>
+                <a class="stretched-link" th:href="@{/admin/bookings(status='PENDING')}">Xem đơn →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bảng suất chiếu hôm nay theo phòng (Q11 native) -->
+    <h5 class="mb-3">Suất chiếu hôm nay theo phòng</h5>
+    <table class="table table-sm table-bordered w-auto">
+        <thead class="table-light">
+            <tr><th>Phòng</th><th class="text-center">Số suất</th></tr>
+        </thead>
+        <tbody>
+            <tr th:if="${stats.todayShowtimesByRoom.empty}">
+                <td colspan="2" class="text-center text-muted">Không có dữ liệu</td>
+            </tr>
+            <tr th:each="r : ${stats.todayShowtimesByRoom}">
+                <td th:text="${r.roomName}"></td>
+                <td class="text-center" th:text="${r.showtimeCount}"></td>
+            </tr>
+        </tbody>
+    </table>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 </body>
