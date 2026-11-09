@@ -33,3 +33,5 @@
     -fx-border-radius: 8;
     -fx-background-radius: 8;
 }
+.table-row-cell:stopped            { -fx-background-color: #eeeeee; }
+.table-row-cell:stopped .table-cell { -fx-text-fill: #9e9e9e; }
