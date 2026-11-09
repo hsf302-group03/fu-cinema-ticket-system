@@ -41,6 +41,7 @@ public class MainController {
                 e -> lblClock.setText(LocalDateTime.now().format(CLOCK))));
         clock.setCycleCount(Animation.INDEFINITE);
         clock.play();
+        onDashboard(); // Mở ngay Dashboard khi vừa đăng nhập vào
     }
 
     @FXML private void onDashboard()   { sceneManager.showIn(root, View.DASHBOARD); }

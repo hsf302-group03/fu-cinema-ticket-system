@@ -8,3 +8,28 @@
 .status-bar         { -fx-padding: 6 16; -fx-background-color: #f3f4f6; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0; }
 .page               { -fx-padding: 16; -fx-spacing: 12; }
 .page-title         { -fx-font-size: 20px; -fx-font-weight: bold; }
+/* Thẻ KPI & Biểu đồ cho Dashboard */
+.kpi {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.kpi-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.kpi-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+.chart-container {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
