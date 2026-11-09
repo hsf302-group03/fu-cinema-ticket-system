@@ -15,6 +15,6 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
         sceneManager.init(event.getStage());
-        sceneManager.switchTo(View.MAIN);
+        sceneManager.switchTo(View.LOGIN);
     }
 }

@@ -55,6 +55,6 @@ public class MainController {
     private void onLogout() {
         if (clock != null) clock.stop();
         session.logout();
-        sceneManager.switchTo(View.MAIN);
+        sceneManager.switchTo(View.LOGIN);
     }
 }
