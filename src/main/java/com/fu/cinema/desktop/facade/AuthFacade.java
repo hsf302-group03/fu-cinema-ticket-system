@@ -6,10 +6,23 @@ import com.fu.cinema.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Facade xác thực đăng nhập trên Desktop (TODO 36 & BR-D1).
+ * Chỉ cho phép tài khoản có quyền ADMIN đăng nhập ứng dụng quầy vé.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthFacade {
 
+    private final AuthService authService;
+
+    /**
+     * Đăng nhập nhân viên quầy vé:
+     * - Kiểm tra thông tin đăng nhập và trạng thái tài khoản qua AuthService (BR-03)
+     * - Ràng buộc BR-D1: Chặn tài khoản CUSTOMER, chỉ cho phép ADMIN
+     */
+    public SessionUser loginAdmin(String username, String password) {
+        SessionUser user = authService.login(username, password);
     private final AuthService authService; // Tái sử dụng AuthService của web (đã có BCrypt & kiểm tra LOCKED BR-03)
 
     public SessionUser loginAdmin(String username, String password) {
@@ -20,4 +33,6 @@ public class AuthFacade {
         }
         return user;
     }
+}
+
 }
