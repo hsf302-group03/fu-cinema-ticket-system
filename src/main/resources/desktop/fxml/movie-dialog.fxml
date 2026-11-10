@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:id="root" hgap="12" vgap="12" styleClass="page" prefWidth="520"
+          xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.fu.cinema.desktop.controller.MovieDialogController">
+
+    <columnConstraints>
+        <ColumnConstraints minWidth="130" prefWidth="130"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="320"/>
+    </columnConstraints>
+
+    <Label text="Tên phim *" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="tfTitle" promptText="Nhập tên phim" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Label text="Đạo diễn *" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="tfDirector" promptText="Nhập tên đạo diễn" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+    <Label text="Thời lượng (phút) *" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <Spinner fx:id="spDuration" editable="true" maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    <Label text="Ngày khởi chiếu *" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <DatePicker fx:id="dpRelease" maxWidth="Infinity" promptText="Chọn ngày khởi chiếu" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <Label text="Độ tuổi *" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="cbAgeRating" maxWidth="Infinity" promptText="Chọn giới hạn độ tuổi" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+    <Label text="Thể loại *" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="cbGenre" maxWidth="Infinity" promptText="Chọn thể loại" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    <Label text="Trạng thái *" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+    <ComboBox fx:id="cbStatus" maxWidth="Infinity" promptText="Chọn trạng thái" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+    <Label text="Poster URL" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+    <TextField fx:id="tfPoster" promptText="https://... (tuỳ chọn)" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+    <Label text="Mô tả" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+    <TextArea fx:id="taDescription" promptText="Nhập mô tả tóm tắt phim" wrapText="true" prefRowCount="3" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+</GridPane>

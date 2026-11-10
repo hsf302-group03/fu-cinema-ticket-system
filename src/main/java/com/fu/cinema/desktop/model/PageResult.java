@@ -25,3 +25,14 @@ public record PageResult<T>(
     }
 }
 
+public record PageResult<T>(List<T> items, int page, int totalPages, long totalElements) {
+
+public static <E, T> PageResult<T> of(Page<E> page, Function<E, T> mapper) {
+    return new PageResult<>(
+            page.getContent().stream().map(mapper).toList(),
+            page.getNumber(),
+            Math.max(1, page.getTotalPages()),
+            page.getTotalElements()
+    );
+}
+}

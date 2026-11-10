@@ -22,16 +22,23 @@ public class CinemaFxApp extends Application {
                 .web(WebApplicationType.NONE)
                 .headless(false)
                 .profiles("desktop")
+        // Chạy trên thread JavaFX-Launcher, khởi động Spring trước khi vẽ UI
+        context = new SpringApplicationBuilder(FuCinemaTicketSystemApplication.class)
+                .web(WebApplicationType.NONE)
+                .headless(false)
+                .profiles("desktop") // Tự động kết hợp với profile "local" trong application.properties
                 .run(getParameters().getRaw().toArray(String[]::new));
     }
 
     @Override
     public void start(Stage stage) {
+        // Phát sự kiện để Spring Bean (StageInitializer) nhận và mở cửa sổ
         context.publishEvent(new StageReadyEvent(stage));
     }
 
     @Override
     public void stop() {
+        // Đóng ApplicationContext để giải phóng tài nguyên và kết nối DB
         if (context != null) {
             context.close();
         }
@@ -39,3 +46,4 @@ public class CinemaFxApp extends Application {
     }
 }
 
+}

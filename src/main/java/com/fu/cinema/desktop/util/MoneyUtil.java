@@ -19,3 +19,10 @@ public final class MoneyUtil {
     }
 }
 
+        return v == null ? "" : VND.format(v) + " đ";
+    }
+
+    public static String format(long v) {
+        return VND.format(v) + " đ";
+    }
+}

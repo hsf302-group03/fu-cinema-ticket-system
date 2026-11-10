@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="16" styleClass="page"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fu.cinema.desktop.controller.GenreController">
+
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="QUẢN LÝ THỂ LOẠI" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ Thêm mới" onAction="#onNew"/>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <TableView fx:id="table" HBox.hgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colName" text="Tên thể loại" prefWidth="200"/>
+                <TableColumn fx:id="colDesc" text="Mô tả" prefWidth="400"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+
+        <VBox fx:id="formBox" spacing="12" prefWidth="320" styleClass="chart-container">
+            <Label text="Thông tin thể loại" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <VBox spacing="4">
+                <Label text="Tên thể loại *"/>
+                <TextField fx:id="tfName" promptText="Nhập tên thể loại"/>
+            </VBox>
+            <VBox spacing="4" VBox.vgrow="ALWAYS">
+                <Label text="Mô tả"/>
+                <TextArea fx:id="taDesc" promptText="Nhập mô tả" wrapText="true" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="btnDelete" text="Xoá" onAction="#onDelete" style="-fx-text-fill: #dc2626;"/>
+                <Button fx:id="btnSave" text="Lưu" onAction="#onSave" styleClass="primary"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>
