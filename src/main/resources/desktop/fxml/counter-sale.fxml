@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.fu.cinema.desktop.component.SeatMapView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fu.cinema.desktop.controller.CounterSaleController"
+            styleClass="page">
+    <left>
+        <VBox spacing="10" prefWidth="340" maxWidth="360" styleClass="sale-sidebar">
+            <padding>
+                <Insets top="10" right="15" bottom="10" left="10"/>
+            </padding>
+            <Label text="BÁN VÉ TẠI QUẦY" styleClass="page-title"/>
+
+            <!-- 1. Tìm & Chọn khách hàng -->
+            <Label text="Khách hàng:" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="tfCustomer" promptText="Tìm theo tên, email hoặc SĐT..."/>
+            <ListView fx:id="lvCustomers" prefHeight="130"/>
+
+            <Separator/>
+
+            <!-- 2. Chọn Phim & Suất chiếu -->
+            <Label text="Phim:" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="cbMovie" promptText="-- Chọn phim --" maxWidth="Infinity"/>
+
+            <Label text="Suất chiếu:" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="cbShowtime" promptText="-- Chọn suất chiếu --" maxWidth="Infinity"/>
+
+            <Separator/>
+
+            <!-- 3. Thông tin vé & Thanh toán -->
+            <Label fx:id="lblSeats" text="Ghế: Chưa chọn ghế" wrapText="true" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblTotal" text="Tổng: 0 đ" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e50914;"/>
+
+            <CheckBox fx:id="chkPaid" text="Đã thanh toán (Chuyển CONFIRMED)" selected="true" style="-fx-font-weight: bold;"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- 4. Nút Bán vé -->
+            <Button fx:id="btnSell" text="Bán vé" maxWidth="Infinity" styleClass="primary" prefHeight="40" onAction="#onSell"/>
+        </VBox>
+    </left>
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;">
+            <SeatMapView fx:id="seatMap"/>
+        </ScrollPane>
+    </center>
+</BorderPane>
+
