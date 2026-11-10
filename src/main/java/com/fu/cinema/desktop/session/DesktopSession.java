@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
  * Quản lý phiên làm việc Desktop thay cho HttpSession của web.
  * Singleton: 1 người dùng / 1 ứng dụng Desktop (TODO 36 & TECH-12).
  */
+/** Thay cho HttpSession của web. Singleton: 1 người dùng / 1 cửa sổ */
 @Component
 public class DesktopSession {
 
     private volatile SessionUser user;
     private final ReadOnlyStringWrapper displayName = new ReadOnlyStringWrapper("");
+    private final ReadOnlyStringWrapper displayName = new ReadOnlyStringWrapper("Quản trị viên");
 
     public void login(SessionUser user) {
         this.user = user;
@@ -45,3 +47,4 @@ public class DesktopSession {
     }
 }
 
+}
