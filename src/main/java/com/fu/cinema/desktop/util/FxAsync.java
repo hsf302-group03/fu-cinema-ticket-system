@@ -10,6 +10,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * Tiện ích thực thi tác vụ bất đồng bộ trên Virtual Threads (TECH-15, TODO 35).
+ * Mọi lời gọi Facade chạy trong Task, callback cập nhật UI trên FX Application Thread.
+ */
+@Component
+public class FxAsync implements DisposableBean {
+
 @Component
 public class FxAsync implements DisposableBean {
 
@@ -28,6 +35,17 @@ public class FxAsync implements DisposableBean {
         Task<T> task = new Task<>() {
             @Override
             protected T call() throws Exception {
+                return work.call(); // Background thread (virtual thread)
+            }
+        };
+        if (busy != null) {
+            busy.setDisable(true);
+        }
+        task.setOnSucceeded(e -> { // FX Application Thread
+            if (busy != null) busy.setDisable(false);
+            onSuccess.accept(task.getValue());
+        });
+        task.setOnFailed(e -> { // FX Application Thread
                 return work.call(); // Background thread (Virtual thread) — CẤM chạm vào UI ở đây
             }
         };
@@ -58,4 +76,6 @@ public class FxAsync implements DisposableBean {
     public void destroy() {
         executor.shutdownNow();
     }
+}
+
 }
