@@ -1,3 +1,130 @@
+/* ========================================================
+   FU CINEMA DESKTOP - CSS STYLES (TECH-11, TODO 34 & TODO 42)
+   ======================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* ================== Seat Map Styles (TODO 42) ================== */
+.seat-map {
+    -fx-padding: 16;
+}
+
+.screen {
+    -fx-background-color: #9ca3af;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-padding: 6 12;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+}
+
+.row-label {
+    -fx-font-weight: bold;
+    -fx-min-width: 28;
+    -fx-alignment: center;
+    -fx-text-fill: #374151;
+}
+
+.seat {
+    -fx-min-width: 34;
+    -fx-min-height: 30;
+    -fx-background-color: #e5e7eb;
+    -fx-background-radius: 6 6 2 2;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+
+.seat:hover {
+    -fx-background-color: #d1d5db;
+}
+
+.seat:selected {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+}
+
+/* Ghi đè độ mờ 0.4 mặc định của JavaFX khi bị :disabled */
+.seat:sold {
+    -fx-background-color: #6b7280;
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.legend-swatch {
+    -fx-min-width: 16;
+    -fx-min-height: 16;
+    -fx-background-radius: 3;
+}
+
+.legend-free {
+    -fx-background-color: #e5e7eb;
+}
+
+.legend-selected {
+    -fx-background-color: #16a34a;
+}
+
+.legend-sold {
+    -fx-background-color: #6b7280;
+}
+
+/* ================== General App Styles ================== */
+.sidebar {
+    -fx-background-color: #1f2937;
+    -fx-padding: 12;
+    -fx-pref-width: 200;
+}
+
+.sidebar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e5e7eb;
+    -fx-alignment: center-left;
+}
+
+.sidebar .button:hover {
+    -fx-background-color: #374151;
+}
+
+.brand {
+    -fx-text-fill: #e50914;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 12 0;
+}
+
+.button.primary {
+    -fx-background-color: #e50914;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.status-bar {
+    -fx-padding: 4 12;
+    -fx-background-color: #f3f4f6;
+}
+
+.page {
+    -fx-padding: 16;
+    -fx-spacing: 12;
+}
+
+.page-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.text-field:error,
+.combo-box:error,
+.date-picker:error,
+.spinner:error,
+.text-area:error {
+    -fx-border-color: #d32f2f;
+    -fx-border-width: 1.5;
+}
+
 .root               { -fx-font-family: "Segoe UI", sans-serif; -fx-font-size: 13px; }
 .sidebar            { -fx-background-color: #1f2937; -fx-padding: 12; -fx-pref-width: 220; }
 .sidebar .button    { -fx-background-color: transparent; -fx-text-fill: #e5e7eb; -fx-alignment: center-left; -fx-cursor: hand; }

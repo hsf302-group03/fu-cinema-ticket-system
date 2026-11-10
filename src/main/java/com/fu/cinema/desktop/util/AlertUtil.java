@@ -20,6 +20,7 @@ public final class AlertUtil {
         Throwable cause = (ex instanceof CompletionException || ex instanceof ExecutionException) && ex.getCause() != null
                 ? ex.getCause() : ex;
         Alert.AlertType type = Alert.AlertType.ERROR;
+        String message = switch (cause) {                                  // Java 21 pattern matching
         String message = switch (cause) { // Java 21 pattern matching
             case BusinessException be -> {
                 type = Alert.AlertType.WARNING;
@@ -28,6 +29,7 @@ public final class AlertUtil {
             case ResourceNotFoundException nf -> nf.getMessage();
             case CannotCreateTransactionException cc -> "Không kết nối được cơ sở dữ liệu. Kiểm tra SQL Server.";
             default -> {
+                log.error("Lỗi không mong muốn", cause);                   // stack trace chỉ vào log
                 log.error("Lỗi không mong muốn", cause); // Stack trace chỉ ghi vào log, không lộ lên UI
                 yield "Lỗi hệ thống, vui lòng thử lại.";
             }
@@ -35,6 +37,8 @@ public final class AlertUtil {
         show(type, type == Alert.AlertType.WARNING ? "Không thực hiện được" : "Lỗi", message);
     }
 
+    public static void info(String message)  { show(Alert.AlertType.INFORMATION, "Thông báo", message); }
+    public static void warn(String message)  { show(Alert.AlertType.WARNING, "Cảnh báo", message); }
     public static void info(String message) {
         show(Alert.AlertType.INFORMATION, "Thông báo", message);
     }
@@ -55,4 +59,6 @@ public final class AlertUtil {
         a.setHeaderText(null);
         a.showAndWait();
     }
+}
+
 }
