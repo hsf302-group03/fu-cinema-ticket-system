@@ -3,8 +3,11 @@ package com.fu.cinema.desktop.controller;
 import com.fu.cinema.desktop.facade.MovieFacade;
 import com.fu.cinema.desktop.model.GenreItem;
 import com.fu.cinema.desktop.model.MovieRow;
+import com.fu.cinema.desktop.navigation.SceneManager;
+import com.fu.cinema.desktop.navigation.View;
 import com.fu.cinema.desktop.util.AlertUtil;
 import com.fu.cinema.desktop.util.FxAsync;
+import com.fu.cinema.dto.MovieForm;
 import com.fu.cinema.enums.AgeRating;
 import com.fu.cinema.enums.MovieStatus;
 import javafx.animation.PauseTransition;
@@ -15,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -35,6 +40,7 @@ public class MovieController {
 
     private final MovieFacade facade;
     private final FxAsync fxAsync;
+    private final SceneManager sceneManager;
 
     @FXML private TextField tfSearch;
     @FXML private ComboBox<GenreItem> cbGenre;
@@ -204,7 +210,18 @@ public class MovieController {
     }
 
     protected void openDialog(Long movieId) {
-        AlertUtil.info("Mở dialog phim (TODO 40)");
+        Window owner = table.getScene().getWindow();
+        fxAsync.run(() -> new Object[]{ facade.genres(), movieId == null ? new MovieForm() : facade.getForm(movieId) },
+            data -> {
+                @SuppressWarnings("unchecked") List<GenreItem> genres = (List<GenreItem>) data[0];
+                MovieForm form = (MovieForm) data[1];
+                SceneManager.Loaded<MovieDialogController> dlg = sceneManager.load(View.MOVIE_DIALOG);
+                dlg.controller().open(owner, form, genres).ifPresent(f ->
+                    fxAsync.runVoid(() -> facade.save(f), () -> {
+                        AlertUtil.info("Đã lưu phim");
+                        load(pagination.getCurrentPageIndex());
+                    }, null));
+            });
     }
 
     protected void onDeleteItem(MovieRow m) {
