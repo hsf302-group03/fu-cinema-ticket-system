@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root" spacing="20" styleClass="page"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fu.cinema.desktop.controller.DashboardController">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="DASHBOARD TỔNG QUAN" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblUpdated" style="-fx-text-fill: #9ca3af; -fx-font-style: italic;"/>
+        <Button fx:id="btnRefresh" text="🔄 Làm mới" onAction="#refresh" styleClass="primary"/>
+    </HBox>
+
+    <!-- KPI Cards -->
+    <HBox spacing="16">
+        <VBox styleClass="kpi" HBox.hgrow="ALWAYS" spacing="6">
+            <Label text="PHIM ĐANG CHIẾU" styleClass="kpi-label"/>
+            <Label fx:id="lblShowing" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox styleClass="kpi" HBox.hgrow="ALWAYS" spacing="6">
+            <Label text="TỔNG KHÁCH HÀNG" styleClass="kpi-label"/>
+            <Label fx:id="lblCustomers" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox styleClass="kpi" HBox.hgrow="ALWAYS" spacing="6">
+            <Label text="ĐƠN CHỜ XÁC NHẬN" styleClass="kpi-label"/>
+            <Label fx:id="lblPending" text="0" styleClass="kpi-value" style="-fx-text-fill: #f59e0b;"/>
+        </VBox>
+    </HBox>
+
+    <!-- Chart -->
+    <VBox spacing="10" VBox.vgrow="ALWAYS" styleClass="chart-container">
+        <Label text="Thống kê số suất chiếu hôm nay theo phòng" style="-fx-font-weight: bold; -fx-font-size: 15px;"/>
+        <BarChart fx:id="chartRooms" legendVisible="false" VBox.vgrow="ALWAYS">
+            <xAxis>
+                <CategoryAxis label="Phòng chiếu"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis label="Số suất chiếu" minorTickVisible="false" tickUnit="1"/>
+            </yAxis>
+        </BarChart>
+    </VBox>
+</VBox>
