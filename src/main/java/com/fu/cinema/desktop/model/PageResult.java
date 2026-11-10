@@ -5,6 +5,26 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Record đóng gói kết quả phân trang cho Desktop (TECH-14, TODO 35).
+ */
+public record PageResult<T>(
+        List<T> items,
+        int page,
+        int totalPages,
+        long totalElements
+) {
+
+    public static <E, T> PageResult<T> of(Page<E> page, Function<E, T> mapper) {
+        return new PageResult<>(
+                page.getContent().stream().map(mapper).toList(),
+                page.getNumber(),
+                Math.max(1, page.getTotalPages()),
+                page.getTotalElements()
+        );
+    }
+}
+
 public record PageResult<T>(List<T> items, int page, int totalPages, long totalElements) {
 
 public static <E, T> PageResult<T> of(Page<E> page, Function<E, T> mapper) {

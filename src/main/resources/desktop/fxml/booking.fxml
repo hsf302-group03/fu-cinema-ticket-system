@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fu.cinema.desktop.controller.BookingAdminController"
+      spacing="12" styleClass="page">
+
+    <!-- Tiêu đề & Tóm tắt -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <Label text="QUẢN LÝ ĐƠN ĐẶT VÉ" styleClass="page-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblSummary" text="Đang tải dữ liệu..." style="-fx-font-style: italic; -fx-text-fill: #6b7280;"/>
+    </HBox>
+
+    <!-- Thanh lọc tìm kiếm -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f9fafb; -fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #e5e7eb; -fx-border-radius: 6;">
+        <Label text="Lọc:" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="cbStatus" prefWidth="170"/>
+        <DatePicker fx:id="dpFrom" promptText="Từ ngày" prefWidth="135"/>
+        <DatePicker fx:id="dpTo" promptText="Đến ngày" prefWidth="135"/>
+        <TextField fx:id="tfKeyword" promptText="Tìm theo tên hoặc SĐT khách..." prefWidth="240" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnRefresh" text="Làm mới" onAction="#onRefresh"/>
+    </HBox>
+
+    <!-- Bảng dữ liệu đơn đặt vé -->
+    <TableView fx:id="table" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="Mã đơn" prefWidth="75"/>
+            <TableColumn fx:id="colCustomer" text="Khách hàng" prefWidth="160"/>
+            <TableColumn fx:id="colMovie" text="Tên phim" prefWidth="180"/>
+            <TableColumn fx:id="colRoom" text="Phòng" prefWidth="80"/>
+            <TableColumn fx:id="colStartTime" text="Suất chiếu" prefWidth="140"/>
+            <TableColumn fx:id="colSeats" text="Số vé" prefWidth="70"/>
+            <TableColumn fx:id="colTotal" text="Tổng tiền" prefWidth="120"/>
+            <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
+            <TableColumn fx:id="colBookingDate" text="Thời gian đặt" prefWidth="140"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <!-- Thanh phân trang và Nút thao tác -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button fx:id="btnConfirm" text="Xác nhận đơn" onAction="#onConfirm" style="-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button fx:id="btnCancel" text="Huỷ đơn" onAction="#onCancel" style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button fx:id="btnDetail" text="Xem chi tiết" onAction="#onDetail"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Pagination fx:id="pagination" maxPageIndicatorCount="7"/>
+    </HBox>
+
+</VBox>
+

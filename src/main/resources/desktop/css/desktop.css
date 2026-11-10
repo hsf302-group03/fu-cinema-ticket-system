@@ -71,6 +71,11 @@
     -fx-background-color: #6b7280;
 }
 
+/* ================== Booking Status Styles (TODO 44) ================== */
+.st-pending   { -fx-text-fill: #b45309; -fx-font-weight: bold; }
+.st-confirmed { -fx-text-fill: #15803d; -fx-font-weight: bold; }
+.st-cancelled { -fx-text-fill: #b91c1c; -fx-font-weight: bold; }
+
 /* ================== General App Styles ================== */
 .sidebar {
     -fx-background-color: #1f2937;
