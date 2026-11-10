@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fu.cinema.desktop.controller.MainController" styleClass="main">
+    <left>
+        <VBox styleClass="sidebar" spacing="6">
+            <Label text="FU CINEMA" styleClass="brand"/>
+            <Button text="Dashboard"        onAction="#onDashboard"   maxWidth="Infinity"/>
+            <Button text="Bán vé tại quầy"  onAction="#onCounterSale" maxWidth="Infinity" styleClass="primary"/>
+            <Button text="Đơn đặt vé"       onAction="#onBooking"     maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="Thể loại"          onAction="#onGenre"       maxWidth="Infinity"/>
+            <Button text="Phim"              onAction="#onMovie"       maxWidth="Infinity"/>
+            <Button text="Phòng &amp; Suất chiếu" onAction="#onSchedule" maxWidth="Infinity"/>
+            <Button text="Báo cáo"           onAction="#onReport"      maxWidth="Infinity"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button text="Đăng xuất"         onAction="#onLogout"      maxWidth="Infinity"/>
+        </VBox>
+    </left>
+    <center>
+        <StackPane>
+            <Label text="Chào mừng đến với FU Cinema Desktop — Hãy chọn chức năng từ menu bên trái" style="-fx-font-size: 16px;"/>
+        </StackPane>
+    </center>
+    <bottom>
+        <HBox styleClass="status-bar" spacing="16">
+            <Label fx:id="lblUser"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblClock"/>
+        </HBox>
+    </bottom>
+</BorderPane>

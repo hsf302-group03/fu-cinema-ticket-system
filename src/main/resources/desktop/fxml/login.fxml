@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="form" alignment="CENTER" spacing="12" styleClass="login"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fu.cinema.desktop.controller.LoginController"
+      prefWidth="1200" prefHeight="720">
+
+    <Label text="FU CINEMA — QUẦY VÉ" styleClass="brand" style="-fx-font-size: 28px;"/>
+    <Label text="Vui lòng đăng nhập bằng tài khoản Quản trị viên" style="-fx-text-fill: #9ca3af; -fx-padding: 0 0 16 0;"/>
+
+    <TextField fx:id="tfUsername" promptText="Email đăng nhập" maxWidth="340" style="-fx-padding: 10;"/>
+    <PasswordField fx:id="pfPassword" promptText="Mật khẩu" maxWidth="340" style="-fx-padding: 10;"/>
+
+    <Button fx:id="btnLogin" text="Đăng nhập" defaultButton="true" onAction="#onLogin"
+            styleClass="primary" maxWidth="340" style="-fx-padding: 10; -fx-cursor: hand;"/>
+
+    <ProgressIndicator fx:id="progress" visible="false" prefWidth="30" prefHeight="30"/>
+</VBox>

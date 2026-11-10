@@ -17,6 +17,10 @@ import java.util.function.Consumer;
 @Component
 public class FxAsync implements DisposableBean {
 
+@Component
+public class FxAsync implements DisposableBean {
+
+    // TECH-15: Chạy trên Java 21 Virtual Threads
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
     public <T> Task<T> run(Callable<T> work, Consumer<T> onSuccess) {
@@ -42,6 +46,17 @@ public class FxAsync implements DisposableBean {
             onSuccess.accept(task.getValue());
         });
         task.setOnFailed(e -> { // FX Application Thread
+                return work.call(); // Background thread (Virtual thread) — CẤM chạm vào UI ở đây
+            }
+        };
+        if (busy != null) {
+            busy.setDisable(true); // Khóa nút/form trong khi đang tải để chống bấm nhiều lần
+        }
+        task.setOnSucceeded(e -> { // Tự động quay về JavaFX Application Thread
+            if (busy != null) busy.setDisable(false);
+            onSuccess.accept(task.getValue());
+        });
+        task.setOnFailed(e -> {    // Tự động quay về JavaFX Application Thread
             if (busy != null) busy.setDisable(false);
             onError.accept(task.getException());
         });
@@ -49,6 +64,7 @@ public class FxAsync implements DisposableBean {
         return task;
     }
 
+    /** Cho các thao tác không trả kết quả (ví dụ: xoá, xác nhận...) */
     public Task<Void> runVoid(Runnable work, Runnable onSuccess, Node busy) {
         return run(() -> {
             work.run();
@@ -62,3 +78,4 @@ public class FxAsync implements DisposableBean {
     }
 }
 
+}

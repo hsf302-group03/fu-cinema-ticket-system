@@ -125,3 +125,44 @@
     -fx-border-width: 1.5;
 }
 
+.root               { -fx-font-family: "Segoe UI", sans-serif; -fx-font-size: 13px; }
+.sidebar            { -fx-background-color: #1f2937; -fx-padding: 12; -fx-pref-width: 220; }
+.sidebar .button    { -fx-background-color: transparent; -fx-text-fill: #e5e7eb; -fx-alignment: center-left; -fx-cursor: hand; }
+.sidebar .button:hover { -fx-background-color: #374151; }
+.brand              { -fx-text-fill: #e50914; -fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 0 0 12 0; }
+.button.primary     { -fx-background-color: #e50914; -fx-text-fill: white; -fx-font-weight: bold; }
+.button.primary:hover { -fx-background-color: #b80710; }
+.status-bar         { -fx-padding: 6 16; -fx-background-color: #f3f4f6; -fx-border-color: #e5e7eb; -fx-border-width: 1 0 0 0; }
+.page               { -fx-padding: 16; -fx-spacing: 12; }
+.page-title         { -fx-font-size: 20px; -fx-font-weight: bold; }
+/* Thẻ KPI & Biểu đồ cho Dashboard */
+.kpi {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.kpi-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.kpi-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+.chart-container {
+    -fx-background-color: white;
+    -fx-padding: 16;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.text-field:error, .combo-box:error, .date-picker:error, .spinner:error, .text-area:error {
+    -fx-border-color: #d32f2f;
+    -fx-border-width: 1.5;
+}
+.table-row-cell:stopped            { -fx-background-color: #eeeeee; }
+.table-row-cell:stopped .table-cell { -fx-text-fill: #9e9e9e; }
